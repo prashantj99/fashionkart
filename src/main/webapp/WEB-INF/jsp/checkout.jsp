@@ -14,7 +14,7 @@
     User loggedInUser = (User) session.getAttribute("user");
     CartService cartService = new CartServiceImpl();
     CartItemService cartItemService = new CartItemServiceImpl();
-    Cart cart = cartService.getCartByUserId(loggedInUser.getId());
+    Cart cart = cartService.getCartByUser(loggedInUser.getId());
     List<CartItem> cartItems = cartItemService.findAllCartItemsByCartId(cart.getId());
     DiscountService discountService = new DiscountServiceImpl();
 %>
@@ -32,36 +32,7 @@
 <body class="bg-gray-100">
 
 <!-- Header -->
-<header class="sticky-nav sticky top-0 z-50 shadow">
-    <nav class="container mx-auto p-4 flex justify-between items-center">
-        <a href="/index" class="text-2xl font-bold text-gray-800">FashionKart</a>
-        <ul class="flex space-x-6">
-            <% if (loggedInUser != null) { %>
-            <li>
-                <a href="/user/cart" class="text-gray-600 hover:text-gray-900">
-                    <img width="24" height="24" src="https://img.icons8.com/skeuomorphism/32/shopping-cart.png"
-                         alt="shopping-cart"/>
-                </a>
-            </li>
-            <li>
-                <a href="account.jsp" class="text-gray-600 hover:text-gray-900">
-                    <img width="24" height="24" src="https://img.icons8.com/fluency-systems-filled/50/guest-male.png"
-                         alt="guest-male"/>
-                </a>
-            </li>
-            <li>
-                <a href="/controller/logout" class="text-gray-600 hover:text-gray-900">
-                    <img width="24" height="24" src="https://img.icons8.com/ios/50/shutdown--v1.png" alt="logout"/>
-                </a>
-            </li>
-            <% } else { %>
-            <li><a href="/auth/user/login" class="text-gray-600 hover:text-gray-900">Login</a></li>
-            <li><a href="/auth/user/register/email" class="text-gray-600 hover:text-gray-900">Signup</a></li>
-            <% } %>
-        </ul>
-    </nav>
-</header>
-
+<%@include file="navbar.jsp"%>
 <!-- Checkout Section -->
 <section class="container mx-auto p-2">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">

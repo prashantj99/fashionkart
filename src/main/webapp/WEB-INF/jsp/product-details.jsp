@@ -40,6 +40,7 @@
     <title><%= product.getName() %> - FashionKart</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="/js/cart.js"></script>
     <style>
         /* Custom styles for the image gallery */
         .thumbnail:hover {
@@ -183,7 +184,7 @@
                     <img width="24" height="24" src="https://img.icons8.com/ios/50/shopping-bag--v1.png"
                          alt="shopping-bag--v1"/>&nbsp;&nbsp; Add to Cart
                 </button>
-                <button id="add-to-wishlist-btn"
+                <button onclick="addToWishList(<%=product.getId()%>)" id="add-to-wishlist-btn"
                         class="flex-1 flex items-center justify-center bg-gray-400 text-gray-700 px-6 py-6 rounded-lg hover:bg-gray-500 transition-colors duration-200 text-lg font-semibold">
                     <img width="24" height="24" src="https://img.icons8.com/ios/50/like--v1.png" alt="like--v1"/>&nbsp;&nbsp;
                     Wishlist
@@ -208,30 +209,18 @@
                 <div id="popover"
                      class="hidden absolute z-10 w-80 p-4 bg-white border border-gray-200 rounded-xl shadow-2xl text-gray-700 mt-2 transition-opacity duration-300 opacity-0">
                     <div class="flex items-center mb-3">
-                        <div class="ml-3">
-                            <h3 class="text-lg font-semibold text-gray-900"><%= seller.getName() %>
-                            </h3>
-                            <p class="text-xs text-gray-500"><%= seller.getEmail() %>
-                            </p>
-                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900"><%= seller.getName() %></h3>
                     </div>
-                    <p class="text-sm text-gray-700 mb-2"><%= seller.getDescription() %>
+                    <p class="text-sm text-gray-700 mb-2">
+                        <%= seller.getBusinessAddress() %>
                     </p>
-                    <p class="text-sm mt-2 flex items-center">
-                        <svg class="w-4 h-4 mr-2 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none"
-                             viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M3 10h18M9 3l3 7H5l3-7zm6 7h6"></path>
-                        </svg>
-                        <strong>Contact:</strong> <%= seller.getPhoneNumber() %>
+                    <p class="text-sm mt-2 flex items-center justify-between w-full">
+                        <img width="24" height="24" src="https://img.icons8.com/ios/50/apple-phone.png" alt="apple-phone"/>
+                        <strong><%= seller.getSupportContact() %></strong>
                     </p>
-                    <p class="text-sm mt-2 flex items-center">
-                        <svg class="w-4 h-4 mr-2 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none"
-                             viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M17 21V8l-7-7-7 7v13a2 2 0 002 2h10a2 2 0 002-2zM7 16h10"></path>
-                        </svg>
-                        <strong>Address:</strong> <%= "123 Main Street Delhi" %>
+                    <p class="text-sm mt-2 flex items-center justify-between w-full">
+                        <img width="24" height="24" src="https://img.icons8.com/material-rounded/24/support.png" alt="support"/>
+                        <strong><%= seller.getSupportEmail() %></strong>
                     </p>
                 </div>
             </div>
@@ -539,42 +528,8 @@
         });
 
         // Add to Cart Button Click
-        $('#add-to-cart-btn').on('click', function () {
-            if(selectedSize == null){
-                alert('You have not selected product size');
-                return;
-            }
-            $.ajax({
-                url: '/cart/operation/add',
-                type: 'POST',
-                data: {
-                    productId: '<%= product.getId() %>',
-                    selectedSize: selectedSize,
-                },
-                success: function (response) {
-                    alert('Product added to cart');
-                },
-                error: function (xhr, status, error) {
-                    alert('Error adding product to cart: ' + xhr.responseText);
-                }
-            });
-        });
-
-        // Add to Wishlist Button Click
-        $('#add-to-wishlist-btn').on('click', function () {
-            $.ajax({
-                url: '/controller/wishlist/add',
-                type: 'POST',
-                data: {
-                    productId: '<%= product.getId() %>'
-                },
-                success: function (response) {
-                    alert('Product added to wishlist');
-                },
-                error: function () {
-                    alert('Error adding product to wishlist');
-                }
-            });
+        $('#add-to-cart-btn').on('click', ()=>{
+            addToCart(<%=product.getId()%>, selectedSize || "L");
         });
 
         // Thumbnail Click Event
@@ -617,6 +572,5 @@
         );
     });
 </script>
-
 </body>
 </html>

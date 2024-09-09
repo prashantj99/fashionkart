@@ -1,4 +1,5 @@
 <!-- Header -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <header class="bg-white shadow sticky top-0 z-50">
     <nav class="container mx-auto p-4 flex justify-between items-center">
         <a href="/index" class="text-xl font-semibold text-gray-700">FashionKart</a>

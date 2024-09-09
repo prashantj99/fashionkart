@@ -21,24 +21,23 @@ public class WishlistServiceImpl implements WishlistService {
     private final UserRepository userRepository = new UserRepositoryImpl();
 
     @Override
-    public void addProductToWishlist(Long userId, Long productId) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        if (!wishlistRepository.isProductInWishlist(userId, productId)) {
-            wishlistRepository.addProductToWishlist(user, product);
-        }
+    public void addProductToWishlistofUser(Long userId, Long productId) {
+       Wishlist wishlist = wishlistRepository.findByUserId(userId).orElseThrow(()-> new RuntimeException("Wishlist Not found for user with ID "+userId));
+       wishlistRepository.addProductToWishlist(wishlist.getId(), productId);
     }
 
     @Override
     public List<Product> getWishlistProductByUser(Long userId, int page, int itemsPerPage) {
         int offset = (page - 1) * itemsPerPage;
-        return wishlistRepository.findProductsByUserId(userId, offset, itemsPerPage);
+        return wishlistRepository.findWishlistProductsByUserId(userId, offset, itemsPerPage);
     }
 
     @Override
     public long countProductsInWishList(Long userId) {
         return wishlistRepository.countWishlistProductsByUserId(userId);
+    }
+    @Override
+    public void removeProductFromWishlist(Long wishlistId, Long productId) {
+        wishlistRepository.removeProductFromWishlist(wishlistId, productId);
     }
 }

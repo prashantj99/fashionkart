@@ -57,4 +57,7 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     private List<Review> reviews;
+
+    @ManyToMany(mappedBy = "products")
+    List<Wishlist> wishlists;
 }

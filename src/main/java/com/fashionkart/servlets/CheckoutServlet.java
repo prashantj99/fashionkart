@@ -34,7 +34,7 @@ public class CheckoutServlet extends HttpServlet {
 
             orderService.processCheckout(loggedInUser, street, city, state, country, zip);
 
-            request.getRequestDispatcher("/user/orders").forward(request, response);
+            response.sendRedirect("/user/orders");
         }catch (Exception e){
             e.printStackTrace();
         }

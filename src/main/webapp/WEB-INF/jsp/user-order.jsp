@@ -51,33 +51,7 @@
 <body class="bg-gray-100">
 
 <!-- Header -->
-<header class="sticky-nav sticky top-0 z-50 shadow">
-    <nav class="container mx-auto p-4 flex justify-between items-center">
-        <a href="/index" class="text-2xl font-bold text-gray-800">FashionKart</a>
-        <ul class="flex space-x-6">
-            <% if (loggedInUser != null) { %>
-            <li>
-                <a href="/user/cart" class="text-gray-600 hover:text-gray-900">
-                    <img width="24" height="24" src="https://img.icons8.com/skeuomorphism/32/shopping-cart.png"
-                         alt="shopping-cart"/>
-                </a>
-            </li>
-            <li>
-                <a href="account.jsp" class="text-gray-600 hover:text-gray-900">
-                    <img width="24" height="24" src="https://img.icons8.com/fluency-systems-filled/50/guest-male.png"
-                         alt="guest-male"/>
-                </a>
-            </li>
-            <li>
-                <a href="/controller/logout" class="text-gray-600 hover:text-gray-900">
-                    <img width="24" height="24" src="https://img.icons8.com/ios/50/shutdown--v1.png" alt="logout"/>
-                </a>
-            </li>
-            <% } %>
-        </ul>
-    </nav>
-</header>
-
+<%@include file="navbar.jsp"%>
 <section>
     <div class="min-h-screen bg-gray-100 p-6">
         <!-- Breadcrumb -->
@@ -122,7 +96,7 @@
             <!-- Orders Content -->
             <div class="w-full md:w-3/4">
                 <!-- Search & Filters -->
-                <form method="get" action="" class="flex flex-col md:flex-row justify-between mb-6 gap-4">
+                <form method="post" action="/user/orders" class="flex flex-col md:flex-row justify-between mb-6 gap-4">
                     <div class="flex items-center space-x-2 w-full md:w-1/2">
                         <input type="text" name="searchQuery" class="w-full p-2 border rounded-lg"
                                placeholder="Search orders..."/>

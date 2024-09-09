@@ -11,8 +11,8 @@ public interface WishlistRepository {
     void save(Wishlist wishlist);
     void update(Wishlist wishlist);
     Optional<Wishlist> findByUserId(Long userId);
-    boolean isProductInWishlist(Long userId, Long productId);
-    void addProductToWishlist(User user, Product product);
-    List<Product> findProductsByUserId(Long userId, int offset, int limit);
+    void addProductToWishlist(Long wishlistId, Long productId);
+    List<Product> findWishlistProductsByUserId(Long userId, int offset, int limit);
     long countWishlistProductsByUserId(Long userId);
+    void removeProductFromWishlist(Long wishlistId, Long productId);
 }

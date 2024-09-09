@@ -17,6 +17,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,400;1,600&display=swap"
           rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.0/lazysizes.min.js" async=""></script>
+    <script src="/js/cart.js"></script>
     <style>
         .product-grid {
             display: grid;
@@ -296,12 +297,12 @@
                             <div class="flex items-center justify-between mt-4">
                               <p class="text-2xl font-bold text-gray-900">&#x20B9;${product.price}</p>
                               <div class="flex space-x-2">
-                                <a href="/product/detail?productId=${product.id}" class="bg-blue-600 flex items-center rounded-md px-3 py-2 text-white text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-colors">
+                                <button onclick="addToCart(${product.id})" class="bg-blue-600 flex items-center rounded-md px-3 py-2 text-white text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-colors">
                                   <img width="20" height="20" src="https://img.icons8.com/ios-glyphs/30/shopping-cart--v1.png" alt="shopping-cart--v1" class="mr-1"/>
-                                </a>
-                                <a href="/product/detail?productId=${product.id}" class="bg-red-600 flex items-center rounded-md px-3 py-2 text-white text-sm font-medium hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 transition-colors">
+                                </button>
+                                <button onclick="addToWishList(${product.id})" class="bg-red-600 flex items-center rounded-md px-3 py-2 text-white text-sm font-medium hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 transition-colors">
                                   <img width="20" height="20" src="https://img.icons8.com/external-tulpahn-flat-tulpahn/64/external-wishlist-online-shopping-tulpahn-flat-tulpahn.png" alt="wishlist" class="mr-1"/>
-                                </a>
+                                </button>
                               </div>
                             </div>
                           </div>
@@ -310,6 +311,5 @@
         }
     });
 </script>
-
 </body>
 </html>

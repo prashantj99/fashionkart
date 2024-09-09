@@ -1,6 +1,7 @@
 package com.fashionkart.servlets;
 
 import com.fashionkart.entities.User;
+import com.fashionkart.entities.Wishlist;
 import com.fashionkart.service.WishlistService;
 import com.fashionkart.serviceimpl.WishlistServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -29,11 +30,11 @@ public class AddToWishlistServlet extends HttpServlet {
 
         try {
             // Add the product to the user's wishlist
-            wishlistService.addProductToWishlist(user.getId(), productId);
+            wishlistService.addProductToWishlistofUser(user.getId(), productId);
             response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().write("Product added to wishlist");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Error {}", e.getMessage());
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("Error adding product to wishlist");
         }

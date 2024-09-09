@@ -15,7 +15,7 @@
     CartService cartService = new CartServiceImpl();
     CartItemService cartItemService = new CartItemServiceImpl();
 
-    Cart cart = cartService.getCartByUserId(loggedInUser.getId());
+    Cart cart = cartService.getCartByUser(loggedInUser);
     List<CartItem> cartItems = cartItemService.findAllCartItemsByCartId(cart.getId());
     DiscountService discountService = new DiscountServiceImpl();
 %>
@@ -63,34 +63,7 @@
 <body>
 
 <%--Header--%>
-<header class="sticky-nav sticky top-0 z-50 shadow">
-    <nav class="container mx-auto p-4 flex justify-between items-center">
-        <a href="/index" class="text-2xl font-bold text-gray-800">FashionKart</a>
-        <ul class="flex space-x-6">
-            <% if (loggedInUser != null) { %>
-            <li>
-                <a href="/user/cart" class="text-gray-600 hover:text-gray-900">
-                    <img width="24" height="24" src="https://img.icons8.com/skeuomorphism/32/shopping-cart.png" alt="shopping-cart"/>
-                </a>
-            </li>
-            <li>
-                <a href="account.jsp" class="text-gray-600 hover:text-gray-900">
-                    <img width="24" height="24" src="https://img.icons8.com/fluency-systems-filled/50/guest-male.png" alt="guest-male"/>
-                </a>
-            </li>
-            <li>
-                <a href="/controller/logout" class="text-gray-600 hover:text-gray-900">
-                    <img width="24" height="24" src="https://img.icons8.com/ios/50/shutdown--v1.png" alt="logout"/>
-                </a>
-            </li>
-            <% } else { %>
-            <li><a href="/auth/user/login" class="text-gray-600 hover:text-gray-900">Login</a></li>
-            <li><a href="/auth/user/register/email" class="text-gray-600 hover:text-gray-900">Signup</a></li>
-            <% } %>
-        </ul>
-    </nav>
-</header>
-
+<%@include file="navbar.jsp"%>
 <!-- Cart Section -->
 <section class="py-12">
     <div class="container mx-auto px-4">
@@ -164,13 +137,12 @@
                         }
                     } else {
                     %>
-                    <div class="flex items-center justify-center h-screen">
+                    <div class="flex flex-col items-center justify-center h-96">
+                        <img width="100" height="100" src="https://img.icons8.com/bubbles/100/shopping-cart.png" alt="shopping-cart"/>
                         <div class="text-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h18M9 3v3m0 0h6V3m-6 3v12m6-12v12m-3-12v12m9-12v12M3 7v12"></path>
-                            </svg>
-                            <h2 class="text-2xl font-semibold text-gray-700">Your Cart is Empty</h2>
-                            <a href="/index" class="mt-4 inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                            <h4 class="text-2xl font-semibold text-gray-700">Your Cart is Empty</h4>
+                            <a href="/index"
+                               class="mt-4 outline inline-block px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg shadow-lg transition-all duration-300 ease-in-out hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-700 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-blue-300">
                                 Continue Shopping
                             </a>
                         </div>

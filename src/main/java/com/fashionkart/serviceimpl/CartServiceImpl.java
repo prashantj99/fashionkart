@@ -38,9 +38,14 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Cart getCartByUserId(Long userId) {
-        return cartRepository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Cart not found"));
+    public Cart getCartByUser(User user) {
+        return cartRepository.findByUserId(user.getId())
+                .orElseGet(() -> {
+                    Cart newCart = new Cart();
+                    newCart.setUser(user);
+                    cartRepository.save(newCart);
+                    return newCart;
+                });
     }
 
     @Override
