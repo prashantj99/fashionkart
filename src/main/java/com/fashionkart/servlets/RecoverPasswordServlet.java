@@ -35,12 +35,11 @@ public class RecoverPasswordServlet extends HttpServlet {
             Token token = new Token();
             token.setToken(tokenValue);
             token.setUser(user);
-            token.setExpiryDate(LocalDateTime.now().plusHours(1)); // Token valid for 1 hour
+            token.setExpiryDate(LocalDateTime.now().plusMinutes(15)); // Token valid for 15 min
 
             userService.saveToken(token);
 
             String resetLink = "http://localhost:8080/auth/forgot-password/reset-password?token=" + tokenValue;
-            String subject = "Password Reset Request";
             String message = "To reset your password, please click the link below:\n" + resetLink;
 
             if (emailService.sendRecoveryEmail(email, message)) {

@@ -6,7 +6,9 @@ import com.fashionkart.repositoryimpl.SellerRepositoryImpl;
 import com.fashionkart.service.SellerService;
 import com.fashionkart.utils.PasswordUtil;
 
+import java.util.AbstractMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class SellerServiceImpl implements SellerService {
@@ -45,4 +47,32 @@ public class SellerServiceImpl implements SellerService {
     public Seller getByEmail(String email) {
         return sellerRepository.findByEmail(email).orElse(null);
     }
+
+    @Override
+    public double calculateSellerGrowthPercentage() {
+        long sellersLastMonth = sellerRepository.sellersRegisteredInMonth(1);
+        long sellersMonthBeforeLast = sellerRepository.sellersRegisteredInMonth(2);
+        System.out.println("S1 "+sellersLastMonth);
+        System.out.println("S2 "+sellersMonthBeforeLast);
+
+        if (sellersMonthBeforeLast == 0) {
+            return sellersLastMonth > 0 ? 100.0 : 0.0;
+        }
+
+        return ((double) (sellersLastMonth - sellersMonthBeforeLast) / sellersMonthBeforeLast) * 100;
+    }
+
+    @Override
+    public long totalSellers(){
+        return sellerRepository.countSellers();
+    }
+
+    @Override
+    public Map.Entry<List<Seller>, Long> getPaginatedSellers(int pageNumber, int pageSize) {
+        int offset = (pageNumber - 1) * pageSize;
+        List<Seller> sellers = sellerRepository.findPaginated(offset, pageSize);
+        long totalItems = sellerRepository.countSellers();
+        return new AbstractMap.SimpleEntry<>(sellers, totalItems);
+    }
+
 }

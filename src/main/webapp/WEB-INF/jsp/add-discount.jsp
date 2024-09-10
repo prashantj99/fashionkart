@@ -14,8 +14,6 @@
 
 <section class="py-12">
     <div class="container mx-auto max-w-xl bg-white p-8 rounded-lg shadow-lg">
-        <h2 class="text-3xl font-bold mb-6 text-center text-gray-800">Add New Discount</h2>
-
         <% if (request.getAttribute("errorMessage") != null) { %>
         <div class="mb-4 bg-red-100 text-red-700 border border-red-400 p-4 rounded">
             <%= request.getAttribute("errorMessage") %>
@@ -29,14 +27,20 @@
                        class="mt-1 block w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
                        required>
             </div>
-
-            <div>
-                <label for="percentage" class="block text-sm font-medium text-gray-700">Discount Percentage</label>
-                <input type="number" step="0.01" id="percentage" name="percentage"
-                       class="mt-1 block w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
-                       required>
+            <div class="flex w-full gap-5">
+                <div class="w-full">
+                    <label for="percentage" class="block text-sm font-medium text-gray-700">Discount Percentage</label>
+                    <input type="number" step="0.01" id="percentage" name="percentage"
+                           class="mt-1 block w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                           required>
+                </div>
+                <div class="w-full">
+                    <label for="minimumValue" class="block text-sm font-medium text-gray-700">Minimum Value</label>
+                    <input type="number" step="0.01" id="minimumValue" name="minimumValue"
+                           class="mt-1 block w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                           required>
+                </div>
             </div>
-
             <div>
                 <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
                 <textarea id="description" name="description"
@@ -44,12 +48,6 @@
                           rows="3" required></textarea>
             </div>
 
-            <div>
-                <label for="minimumValue" class="block text-sm font-medium text-gray-700">Minimum  Value</label>
-                <input type="number" step="0.01" id="minimumValue" name="minimumValue"
-                       class="mt-1 block w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
-                       required>
-            </div>
 
             <div>
                 <label for="categoryId" class="block text-sm font-medium text-gray-700">Applicable Category</label>
@@ -66,24 +64,24 @@
                     <% } %>
                 </select>
             </div>
+            <div class="flex gap-5 w-full">
+                <div class="w-full">
+                    <label for="startDate" class="block text-sm font-medium text-gray-700">Start Date</label>
+                    <input type="date" id="startDate" name="startDate"
+                           class="mt-1 block w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                           required>
+                </div>
 
-            <div>
-                <label for="startDate" class="block text-sm font-medium text-gray-700">Start Date</label>
-                <input type="date" id="startDate" name="startDate"
-                       class="mt-1 block w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
-                       required>
+                <div class="w-full">
+                    <label for="endDate" class="block text-sm font-medium text-gray-700">End Date</label>
+                    <input type="date" id="endDate" name="endDate"
+                           class="mt-1 block w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                           required>
+                </div>
             </div>
-
-            <div>
-                <label for="endDate" class="block text-sm font-medium text-gray-700">End Date</label>
-                <input type="date" id="endDate" name="endDate"
-                       class="mt-1 block w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
-                       required>
-            </div>
-
             <div>
                 <button type="submit"
-                        class="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-500">
+                        class="w-full bg-gray-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-gray-700 focus:ring-4 focus:ring-gray-500">
                     Add Discount
                 </button>
             </div>

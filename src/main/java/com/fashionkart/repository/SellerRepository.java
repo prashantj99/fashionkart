@@ -12,4 +12,10 @@ public interface SellerRepository {
     void deleteById(Long id);
 
     Optional<Seller> findByEmail(String email);
+
+    List<Seller> findPaginated(int offset, int pageSize);
+
+    long countSellers();
+
+    long sellersRegisteredInMonth(int monthsAgo);
 }

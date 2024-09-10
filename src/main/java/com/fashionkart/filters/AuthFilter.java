@@ -1,5 +1,7 @@
 package com.fashionkart.filters;
 
+import com.fashionkart.entities.User;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -41,6 +43,16 @@ public class AuthFilter implements Filter {
         } else if (requestURI.startsWith("/user")) {
             if (session == null || session.getAttribute("user") == null) {
                 httpResponse.sendRedirect(httpRequest.getContextPath() + "/auth/user/login");
+                return;
+            }
+        } else if (requestURI.startsWith("/admin")) {
+            User user = (User) session.getAttribute("user");
+            if (user == null) {
+                httpResponse.sendRedirect(httpRequest.getContextPath() + "/auth/user/login");
+                return;
+            }
+            if(!user.isAdmin()){
+                httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
         }

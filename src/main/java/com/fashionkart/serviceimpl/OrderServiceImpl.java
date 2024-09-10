@@ -1,14 +1,8 @@
 package com.fashionkart.serviceimpl;
 
 import com.fashionkart.entities.*;
-import com.fashionkart.repository.AddressRepository;
-import com.fashionkart.repository.CartRepository;
-import com.fashionkart.repository.OrderRepository;
-import com.fashionkart.repository.UserRepository;
-import com.fashionkart.repositoryimpl.AddressRepositoryImpl;
-import com.fashionkart.repositoryimpl.CartRepositoryImpl;
-import com.fashionkart.repositoryimpl.OrderRepositoryImpl;
-import com.fashionkart.repositoryimpl.UserRepositoryImpl;
+import com.fashionkart.repository.*;
+import com.fashionkart.repositoryimpl.*;
 import com.fashionkart.service.CartItemService;
 import com.fashionkart.service.CartService;
 import com.fashionkart.service.DiscountService;
@@ -29,6 +23,7 @@ public class OrderServiceImpl implements OrderService {
     private final DiscountService discountService = new DiscountServiceImpl();
     private final AddressRepository addressRepository = new AddressRepositoryImpl();
     private final CartItemService cartItemService = new CartItemServiceImpl();
+    private final ProductRepository productRepository = new ProductRepositoryImpl();
 
     @Override
     public UserOrder getOrderById(Long id) {
@@ -91,6 +86,12 @@ public class OrderServiceImpl implements OrderService {
         //set order items
         userOrder.setOrderItems(orderItems);
         orderRepository.save(userOrder);
+
+        orderItems.forEach(orderItem -> {
+            Product p = orderItem.getProduct();
+            p.setQuantityAvailable(p.getQuantityAvailable()-orderItem.getQuantity());
+            productRepository.update(p);
+        });
 
         //clear cart
         cartRepository.clearCart(cart);

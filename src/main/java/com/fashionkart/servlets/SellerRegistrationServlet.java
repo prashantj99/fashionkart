@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.regex.Pattern;
 
 @WebServlet("/controller/seller-register")
@@ -48,6 +49,7 @@ public class SellerRegistrationServlet extends HttpServlet {
             seller.setBusinessAddress(businessAddress);
             seller.setSupportEmail(supportEmail);
             seller.setSupportContact(supportContact);
+            seller.setRegisteredOn(LocalDateTime.now());
 
             // Save seller to the database
             sellerService.saveSeller(seller);

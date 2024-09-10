@@ -15,6 +15,6 @@ public interface ProductService {
     Product getProductById(Long id);
     void deleteProduct(Long id);
     ProductPageResponse getSearchProducts(String searchQuery, List<Long> categories, List<Long> brands, GenderType genderType, double minPrice, double maxPrice, String sortBy, String sortingOrder, int offset, int limit);
-    ProductPageResponse getProductsPage(int pageNumber, int pageSize);
+    ProductPageResponse getProductsPageBySeller(Long sellerId, int pageNumber, int pageSize);
     List<Product> getSimilarProducts(Product product);
 }

@@ -69,7 +69,7 @@
             <!-- Sidebar -->
             <aside class="bg-white w-full h-screen md:w-1/4 p-4 rounded-lg shadow-md">
                 <div class="text-center mb-6">
-                    <img class="w-20 h-20 rounded-full mx-auto" src="https://via.placeholder.com/150" alt="User Avatar">
+                    <img class="w-20 h-20 rounded-full mx-auto" src="<%=FirebaseStorageUtil.generateSignedUrl(loggedInUser.getImage())%>" alt="User Avatar">
                     <h2 class="mt-3 text-lg font-semibold"><%=loggedInUser.getFirstName()%> (Personal)</h2>
                     <p class="text-gray-500"><%= loggedInUser.getEmail() %>
                     </p>

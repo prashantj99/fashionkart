@@ -7,6 +7,34 @@
 
     <!-- Servlets -->
     <servlet>
+        <servlet-name>BrandLandingServlet</servlet-name>
+        <jsp-file>/WEB-INF/jsp/brand-landing-page.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminSalesInfoServlet</servlet-name>
+        <jsp-file>/WEB-INF/jsp/admin-sales-info.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminSellerBYEMAILInfoServlet</servlet-name>
+        <jsp-file>/WEB-INF/jsp/admin-seller-info.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminSellerInfoServlet</servlet-name>
+        <jsp-file>/WEB-INF/jsp/admin-sellers-info.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminUserOrderServlet</servlet-name>
+        <jsp-file>/WEB-INF/jsp/admin-user-orders.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminDashboardServlet</servlet-name>
+        <jsp-file>/WEB-INF/jsp/admin-dashboard.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>UserAccountServlet</servlet-name>
+        <jsp-file>/WEB-INF/jsp/account.jsp</jsp-file>
+    </servlet>
+    <servlet>
         <servlet-name>WishlistServlet</servlet-name>
         <jsp-file>/WEB-INF/jsp/wishlist.jsp</jsp-file>
     </servlet>
@@ -100,6 +128,34 @@
     </servlet>
 
     <!-- Servlet Mappings -->
+    <servlet-mapping>
+        <servlet-name>BrandLandingServlet</servlet-name>
+        <url-pattern>/welcome/brand</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminSalesInfoServlet</servlet-name>
+        <url-pattern>/admin/sales/info</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminSellerBYEMAILInfoServlet</servlet-name>
+        <url-pattern>/admin/seller/info</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminSellerInfoServlet</servlet-name>
+        <url-pattern>/admin/sellers/info</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminUserOrderServlet</servlet-name>
+        <url-pattern>/admin/user/orders</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminDashboardServlet</servlet-name>
+        <url-pattern>/admin/dashboard</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserAccountServlet</servlet-name>
+        <url-pattern>/user/account</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>WishlistServlet</servlet-name>
         <url-pattern>/user/wishlist</url-pattern>

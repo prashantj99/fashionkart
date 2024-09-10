@@ -450,12 +450,12 @@
 <!-- Related Products Section -->
 <section class="container mx-auto mt-12 p-10">
     <h2 class="text-xl font-semibold text-gray-900 mb-4">Related Products</h2>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 overflow-x-auto">
-        <%
+    <div class="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3">
+    <%
             List<Product> relatedProducts = productService.getSimilarProducts(product);
             for (Product relatedProduct : relatedProducts) {
         %>
-        <div class="relative m-10 w-full max-w-sm rounded-lg bg-white shadow-lg transition-transform transform hover:scale-105">
+        <div class="relative w-full max-w-sm rounded-lg bg-white shadow-lg transition-transform transform hover:scale-105">
             <a href="/product/detail?productId=<%=relatedProduct.getId()%>">
                 <img class="w-full h-auto object-cover rounded-t-lg lazyload" src="<%=FirebaseStorageUtil.generateSignedUrl(relatedProduct.getImages().get(0).getImageUrl())%>"
                      alt="product image"/>

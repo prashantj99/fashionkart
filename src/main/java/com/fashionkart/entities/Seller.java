@@ -1,14 +1,15 @@
 package com.fashionkart.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Data
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Seller {
@@ -26,6 +27,7 @@ public class Seller {
     private String businessAddress;
     private String supportEmail;
     private String supportContact;
+    private LocalDateTime registeredOn;
 
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products;

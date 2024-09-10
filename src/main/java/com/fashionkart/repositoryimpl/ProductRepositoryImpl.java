@@ -9,9 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 public class ProductRepositoryImpl implements ProductRepository {
@@ -53,7 +51,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public List<Product> findProducts(int offset, int limit) {
+    public List<Product> findPaginatedProducts(int offset, int limit) {
         try (Session session = FactoryProvider.getSessionFactory().openSession()) {
             return session.createQuery("FROM Product", Product.class)
                     .setFirstResult(offset)
@@ -74,53 +72,39 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public List<Product> findByBrandId(Long brandId) {
+    public Map.Entry<List<Product>, Integer> findBySeller(Long sellerId, int offset, int pageSize) {
         try (Session session = FactoryProvider.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Product WHERE brand.id = :brandId", Product.class)
-                    .setParameter("brandId", brandId)
+            List<Product> products = session.createQuery("FROM Product WHERE seller.id = :sellerId", Product.class)
+                    .setParameter("sellerId", sellerId)
+                    .setFirstResult(offset)
+                    .setMaxResults(pageSize)
                     .list();
+
+            int totalRecords = session.createQuery("SELECT COUNT(*) FROM Product WHERE seller.id = :sellerId", Long.class)
+                    .setParameter("sellerId", sellerId)
+                    .uniqueResult().intValue();
+
+            return Map.entry(products, totalRecords);
         }
     }
 
     @Override
-    public List<Product> findByCategoryId(Long categoryId) {
-        try (Session session = FactoryProvider.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Product WHERE category.id = :categoryId", Product.class)
-                    .setParameter("categoryId", categoryId)
-                    .list();
-        }
-    }
-
-    @Override
-    public List<Product> getSearchProducts(
+    public Map.Entry<List<Product>, Integer> getSearchProductsAndCount(
             String searchQuery, List<Long> categories, List<Long> brands,
             GenderType genderType, double minPrice, double maxPrice,
             String sortBy, String sortingOrder, int offset, int limit) {
 
+        List<Product> products = List.of();
+        int totalItems = 0;
+
         try (Session session = FactoryProvider.getSessionFactory().openSession()) {
 
             StringBuilder hql = new StringBuilder("from Product where 1=1");
+            StringBuilder countHql = new StringBuilder("select count(*) from Product where 1=1");
 
-            if (searchQuery != null && !searchQuery.isEmpty()) {
-                hql.append(" and name like :searchQuery");
-            }
+            buildQueryConditions(hql, countHql, searchQuery, categories, brands, genderType, minPrice, maxPrice);
 
-            if (minPrice >= 0 && maxPrice > 0) {
-                hql.append(" and price between :minPrice and :maxPrice");
-            }
-
-            if (genderType != null) {
-                hql.append(" and genderType = :genderType");
-            }
-
-            if (categories != null && !categories.isEmpty()) {
-                hql.append(" and category.id in (:categories)");
-            }
-
-            if (brands != null && !brands.isEmpty()) {
-                hql.append(" and brand.id in (:brands)");
-            }
-
+            // Sorting
             if (sortBy != null && !sortBy.isEmpty()) {
                 hql.append(" order by ").append(sortBy);
                 if ("desc".equalsIgnoreCase(sortingOrder)) {
@@ -130,103 +114,78 @@ public class ProductRepositoryImpl implements ProductRepository {
                 }
             }
 
-            // Create the query
-            Query<Product> query = session.createQuery(hql.toString(), Product.class);
+            Query<Product> productQuery = session.createQuery(hql.toString(), Product.class);
+            Query<Long> countQuery = session.createQuery(countHql.toString(), Long.class);
 
-            // Set query parameters
-            if (searchQuery != null && !searchQuery.isEmpty()) {
-                query.setParameter("searchQuery", "%" + searchQuery + "%");
-            }
+            setQueryParameters(productQuery, searchQuery, categories, brands, genderType, minPrice, maxPrice);
+            setQueryParameters(countQuery, searchQuery, categories, brands, genderType, minPrice, maxPrice);
 
-            if (minPrice >= 0 && maxPrice > 0) {
-                query.setParameter("minPrice", minPrice);
-                query.setParameter("maxPrice", maxPrice);
-            }
+            // Set pagination for product query
+            productQuery.setFirstResult(offset);
+            productQuery.setMaxResults(limit);
 
-            if (genderType != null) {
-                query.setParameter("genderType", genderType);
-            }
+            products = productQuery.list();
+            totalItems = countQuery.uniqueResult().intValue();
 
-            if (categories != null && !categories.isEmpty()) {
-                query.setParameterList("categories", categories);
-            }
-
-            if (brands != null && !brands.isEmpty()) {
-                query.setParameterList("brands", brands);
-            }
-
-            // Set pagination
-            query.setFirstResult(offset);
-            query.setMaxResults(limit);
-
-            return query.list();
         } catch (Exception e) {
-            log.error("Error finding products: ", e);
-            return List.of();
+            log.error("Error fetching products and count: ", e);
+        }
+
+        return Map.entry(products, totalItems);
+    }
+
+    private void buildQueryConditions(StringBuilder hql, StringBuilder countHql,
+                                      String searchQuery, List<Long> categories, List<Long> brands,
+                                      GenderType genderType, double minPrice, double maxPrice) {
+        if (searchQuery != null && !searchQuery.isEmpty()) {
+            hql.append(" and name like :searchQuery");
+            countHql.append(" and name like :searchQuery");
+        }
+
+        if (minPrice >= 0 && maxPrice > 0) {
+            hql.append(" and price between :minPrice and :maxPrice");
+            countHql.append(" and price between :minPrice and :maxPrice");
+        }
+
+        if (genderType != null) {
+            hql.append(" and genderType = :genderType");
+            countHql.append(" and genderType = :genderType");
+        }
+
+        if (categories != null && !categories.isEmpty()) {
+            hql.append(" and category.id in (:categories)");
+            countHql.append(" and category.id in (:categories)");
+        }
+
+        if (brands != null && !brands.isEmpty()) {
+            hql.append(" and brand.id in (:brands)");
+            countHql.append(" and brand.id in (:brands)");
         }
     }
 
-
-
-    @Override
-    public int countProducts(String searchQuery, List<Long> categories, List<Long> brands, GenderType genderType, double minPrice, double maxPrice) {
-        int productCount = 0;
-
-        try (Session session = FactoryProvider.getSessionFactory().openSession()) {
-            StringBuilder hql = new StringBuilder("select count(*) from Product where 1=1");
-
-            if (searchQuery != null && !searchQuery.isEmpty()) {
-                hql.append(" and name like :searchQuery");
-            }
-
-            if (minPrice >= 0 && maxPrice > 0) {
-                hql.append(" and price between :minPrice and :maxPrice");
-            }
-
-            if (genderType != null) {
-                hql.append(" and genderType = :genderType");
-            }
-
-            if (categories != null && !categories.isEmpty()) {
-                hql.append(" and category.id in (:categories)");
-            }
-
-            if (brands != null && !brands.isEmpty()) {
-                hql.append(" and brand.id in (:brands)");
-            }
-
-            Query<Long> query = session.createQuery(hql.toString(), Long.class);
-
-            if (searchQuery != null && !searchQuery.isEmpty()) {
-                query.setParameter("searchQuery", "%" + searchQuery + "%");
-            }
-
-            if (minPrice >= 0 && maxPrice > 0) {
-                query.setParameter("minPrice", minPrice);
-                query.setParameter("maxPrice", maxPrice);
-            }
-
-            if (genderType != null) {
-                query.setParameter("genderType", genderType);
-            }
-
-            if (categories != null && !categories.isEmpty()) {
-                query.setParameterList("categories", categories);
-            }
-
-            if (brands != null && !brands.isEmpty()) {
-                query.setParameterList("brands", brands);
-            }
-
-            productCount = query.uniqueResult().intValue();
-
-        } catch (Exception e) {
-            log.error("An error occurred while counting products: ", e);
+    private void setQueryParameters(Query<?> query, String searchQuery, List<Long> categories, List<Long> brands,
+                                    GenderType genderType, double minPrice, double maxPrice) {
+        if (searchQuery != null && !searchQuery.isEmpty()) {
+            query.setParameter("searchQuery", "%" + searchQuery + "%");
         }
 
-        return productCount;
-    }
+        if (minPrice >= 0 && maxPrice > 0) {
+            query.setParameter("minPrice", minPrice);
+            query.setParameter("maxPrice", maxPrice);
+        }
 
+        if (genderType != null) {
+            query.setParameter("genderType", genderType);
+        }
+
+        if (categories != null && !categories.isEmpty()) {
+            query.setParameterList("categories", categories);
+        }
+
+        if (brands != null && !brands.isEmpty()) {
+            query.setParameterList("brands", brands);
+        }
+    }
 
     @Override
     public int countAllProducts() {

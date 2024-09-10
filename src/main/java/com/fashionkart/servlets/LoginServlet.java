@@ -27,7 +27,10 @@ public class LoginServlet extends HttpServlet {
 
         if (userOptional.isPresent()) {
             request.getSession().setAttribute("user", userOptional.get());
-            response.sendRedirect("/index");
+            if(userOptional.get().isAdmin()){
+                response.sendRedirect("/admin/dashboard");
+            }else
+                response.sendRedirect("/index");
         } else {
             request.setAttribute("errorMessage", "Invalid username/email or password.");
             request.getRequestDispatcher("/auth/user/login").forward(request, response);

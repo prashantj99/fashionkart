@@ -23,6 +23,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void updateUser(User user) {
+        userRepository.update(user);
+    }
+
+    @Override
     public User registerUser(User user) {
         return userRepository.save(user);
     }
@@ -94,5 +99,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<Token> findTokenByUser(User user) {
         return tokenRepository.findByUser(user);
+    }
+    @Override
+    public void updateProfileImage(Long userId, String newImageUrl) {
+        User user = userRepository.findById(userId).orElseThrow(()-> new RuntimeException("User Not Found"));
+        user.setImage(newImageUrl);
+        userRepository.update(user);
     }
 }

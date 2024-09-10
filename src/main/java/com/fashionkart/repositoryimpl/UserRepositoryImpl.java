@@ -16,13 +16,18 @@ public class UserRepositoryImpl implements UserRepository {
     public User save(User user) {
         try (Session session = FactoryProvider.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
-            if (user.getId() == null) {
-                session.persist(user);
-            } else {
-                session.merge(user);
-            }
+            session.persist(user);
             tx.commit();
             return user;
+        }
+    }
+
+    @Override
+    public void update(User user) {
+        try (Session session = FactoryProvider.getSessionFactory().openSession()) {
+            Transaction tx = session.beginTransaction();
+            session.merge(user);
+            tx.commit();
         }
     }
 

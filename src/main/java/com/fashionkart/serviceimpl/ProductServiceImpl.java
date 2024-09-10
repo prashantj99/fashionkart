@@ -18,6 +18,7 @@ import com.fashionkart.utils.FactoryProvider;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ProductServiceImpl implements ProductService {
@@ -83,9 +84,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductPageResponse getSearchProducts(String searchQuery, List<Long> categories, List<Long> brands, GenderType genderType, double minPrice, double maxPrice, String sortBy, String sortingOrder, int pageNumber, int pageSize) {
         int offset = (pageNumber - 1) * pageSize;
-        List<Product> products = productRepository.getSearchProducts(searchQuery, categories, brands, genderType, minPrice, maxPrice, sortBy, sortingOrder, offset, pageSize);
-        List<ProductDTO> productDTOS = products.stream().map(ProductDTO::new).collect(Collectors.toList());
-        int totalRecords = productRepository.countProducts(searchQuery, categories, brands, genderType, minPrice, maxPrice);
+        Map.Entry<List<Product>, Integer> pageResponse = productRepository.getSearchProductsAndCount(searchQuery, categories, brands, genderType, minPrice, maxPrice, sortBy, sortingOrder, offset, pageSize);
+        List<ProductDTO> productDTOS = pageResponse.getKey().stream().map(ProductDTO::new).collect(Collectors.toList());
+        int totalRecords = pageResponse.getValue();
         boolean isLastPage = offset + pageSize >= totalRecords;
         return ProductPageResponse.builder()
                 .products(productDTOS)
@@ -97,11 +98,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductPageResponse getProductsPage(int pageNumber, int pageSize) {
+    public ProductPageResponse getProductsPageBySeller(Long sellerId, int pageNumber, int pageSize) {
         int offset = (pageNumber - 1) * pageSize;
-        int totalRecords = productRepository.countAllProducts();
-        List<Product> products = productRepository.findProducts(offset, pageSize);
-        List<ProductDTO> productDTOS = products.stream().map(ProductDTO::new).collect(Collectors.toList());
+        Map.Entry<List<Product>, Integer> pageResponse = productRepository.findBySeller(sellerId, offset, pageSize);
+        List<ProductDTO> productDTOS = pageResponse.getKey().stream().map(ProductDTO::new).collect(Collectors.toList());
+        int totalRecords = pageResponse.getValue();
         boolean isLastPage = offset + pageSize >= totalRecords;
         return ProductPageResponse.builder()
                 .products(productDTOS)

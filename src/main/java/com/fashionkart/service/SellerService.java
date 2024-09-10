@@ -3,6 +3,7 @@ package com.fashionkart.service;
 import com.fashionkart.entities.Seller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface SellerService {
@@ -14,4 +15,9 @@ public interface SellerService {
 
     Seller getByEmail(String email);
 
+    double calculateSellerGrowthPercentage();
+
+    long totalSellers();
+
+    Map.Entry<List<Seller>, Long> getPaginatedSellers(int pageNumber, int pageSize);
 }

@@ -11,26 +11,16 @@
 
 <div class="overflow-x-hidden md:bg-[linear-gradient(90deg,_white_70%,_lightgray_70%)]">
     <header class="relative flex max-w-screen-xl flex-col overflow-hidden px-4 py-4 text-blue-900 md:mx-auto md:flex-row md:items-center">
-        <a href="#" class="flex cursor-pointer items-center whitespace-nowrap text-2xl font-light">
-      <span class="mr-2 text-4xl text-blue-500">
-        <svg height="24px" id="Layer_1" viewBox="0 0 48 48" width="48px"
-             xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path
-                clip-rule="evenodd"
-                d="M43,46H5c-2.209,0-4-1.791-4-4l4-24c0.678-3.442,2.668-4,4.877-4h2.652  C14.037,7.052,18.602,2,24,2s9.963,5.052,11.471,12h2.652c2.209,0,4.199,0.558,4.877,4l4,24C47,44.209,45.209,46,43,46z M24,4  c-4.352,0-8.045,4.178-9.418,10h18.837C32.045,8.178,28.353,4,24,4z M41,18c-0.308-1.351-0.957-2-2.37-2h-2.828  C35.925,16.976,36,17.975,36,19c0,0.552-0.447,1-1,1s-1-0.448-1-1c0-1.027-0.069-2.031-0.201-3H14.201C14.07,16.969,14,17.973,14,19  c0,0.552-0.447,1-1,1s-1-0.448-1-1c0-1.025,0.075-2.024,0.197-3H9.369C7.957,16,7.309,16.649,7,18L3,42c0,1.104,0.896,2,2,2h38  c1.104,0,2-0.896,2-2L41,18z"
-                fill-rule="evenodd"></path></svg>
-      </span>
+        <a href="/index" class="flex cursor-pointer items-center whitespace-nowrap text-2xl font-light">
+              <span class="mr-2 text-4xl text-blue-500">
+                <svg height="24px" id="Layer_1" viewBox="0 0 48 48" width="48px"
+                     xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path
+                        clip-rule="evenodd"
+                        d="M43,46H5c-2.209,0-4-1.791-4-4l4-24c0.678-3.442,2.668-4,4.877-4h2.652  C14.037,7.052,18.602,2,24,2s9.963,5.052,11.471,12h2.652c2.209,0,4.199,0.558,4.877,4l4,24C47,44.209,45.209,46,43,46z M24,4  c-4.352,0-8.045,4.178-9.418,10h18.837C32.045,8.178,28.353,4,24,4z M41,18c-0.308-1.351-0.957-2-2.37-2h-2.828  C35.925,16.976,36,17.975,36,19c0,0.552-0.447,1-1,1s-1-0.448-1-1c0-1.027-0.069-2.031-0.201-3H14.201C14.07,16.969,14,17.973,14,19  c0,0.552-0.447,1-1,1s-1-0.448-1-1c0-1.025,0.075-2.024,0.197-3H9.369C7.957,16,7.309,16.649,7,18L3,42c0,1.104,0.896,2,2,2h38  c1.104,0,2-0.896,2-2L41,18z"
+                        fill-rule="evenodd"></path></svg>
+              </span>
             FashionKart
         </a>
-        <input type="checkbox" class="peer hidden" id="navbar-open"/>
-        <label class="absolute top-5 right-7 cursor-pointer md:hidden" for="navbar-open">
-            <span class="sr-only">Toggle Navigation</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                 stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
-            </svg>
-        </label>
-        <nav aria-label="Header Navigation"
-             class="flex max-h-0 w-full flex-col items-center justify-between overflow-hidden transition-all peer-checked:mt-8 peer-checked:max-h-56 md:ml-24 md:max-h-full md:flex-row md:items-start">
             <ul class="flex flex-col items-center space-y-2 md:ml-auto md:flex-row md:space-y-0">
                 <li class="md:mr-12"><a href="/auth/brand/register">Register</a></li>
                 <li class="md:mr-12">
@@ -39,7 +29,6 @@
                     </a>
                 </li>
             </ul>
-        </nav>
     </header>
 
     <div class="relative mx-auto max-w-screen-xl px-4 py-12 sm:px-10 sm:py-16 lg:pt-20 xl:pb-0">

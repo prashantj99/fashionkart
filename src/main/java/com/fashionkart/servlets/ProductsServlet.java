@@ -23,9 +23,10 @@ public class ProductsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             int pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
+            long sellerId = Long.parseLong(request.getParameter("sellerId"));
             int pageSize = 10;
 
-            ProductPageResponse pageResponse = productService.getProductsPage(pageNumber, pageSize);
+            ProductPageResponse pageResponse = productService.getProductsPageBySeller(sellerId, pageNumber, pageSize);
 
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");

@@ -1,3 +1,6 @@
+<%@ page import="com.fashionkart.entities.Seller" %>
+<%@ page import="com.fashionkart.service.SellerService" %>
+<%@ page import="com.fashionkart.serviceimpl.SellerServiceImpl" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +11,9 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="bg-gray-100">
-
+<%
+    Seller seller = (Seller)session.getAttribute("seller");
+%>
 <section class="py-16">
     <div class="container mx-auto max-w-full bg-white p-8 rounded-lg shadow-lg">
         <h2 class="text-3xl font-bold mb-6 text-primary">Manage Products</h2>
@@ -62,10 +67,12 @@
 <script>
     let currentPage = 1;
     let hasMore = true;
-
+    let loading = false;
     const fetchProducts = () => {
+        loading = true;
+        $('#loadMore').addClass('hidden');
         $.ajax({
-            url: `/controller/products?pageNumber=${currentPage}`,
+            url: `/controller/products?sellerId=<%=seller.getId()%>&pageNumber=${currentPage}`,
             method: 'GET',
             dataType: 'json',
             success: function ({products, isLastPage}) {
@@ -73,21 +80,20 @@
                     updateProductList(products);
                     hasMore = !isLastPage;
                     currentPage++;
-                    if (isLastPage) {
-                        $('#loadMore').hide();
-                    }
-                } else {
-                    $('#loadMore').hide();
                 }
+                loading = false;
+                !isLastPage && $('#loadMore').removeClass('hidden');
             },
             error: function (xhr, status, error) {
                 console.error('Error loading more products:', error);
+                loading = false;
+                $('#loadMore').removeClass('hidden');
             }
         });
     }
 
     $('#loadMore').on('click', function () {
-        hasMore && fetchProducts();
+        !loading && hasMore && fetchProducts();
     });
 
     fetchProducts();

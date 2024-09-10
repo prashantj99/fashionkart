@@ -23,7 +23,12 @@ public class User {
     private String firstName;
     private String lastName;
     private String gender;
+    private boolean isAdmin;
     private LocalDate dateOfBirth;
+
+
+    @Column(length = 1000, columnDefinition = "default.png")
+    private String image;
 
     @Column(length = 15)
     private String phoneNumber;

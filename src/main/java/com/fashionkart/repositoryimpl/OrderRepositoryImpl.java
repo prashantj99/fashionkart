@@ -1,5 +1,6 @@
 package com.fashionkart.repositoryimpl;
 
+import com.fashionkart.entities.User;
 import com.fashionkart.entities.UserOrder;
 import com.fashionkart.repository.OrderRepository;
 import com.fashionkart.utils.FactoryProvider;
@@ -49,6 +50,40 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
+    public List<UserOrder> findWhereUserEmailIs(String userEmail) {
+        try (Session session = FactoryProvider.getSessionFactory().openSession()) {
+            Query<UserOrder> query = session.createQuery(
+                    "SELECT uo FROM UserOrder uo WHERE uo.user.email = :userEmail ORDER BY uo.orderDate DESC", UserOrder.class
+            );
+            query.setParameter("userEmail", userEmail);
+            return query.list();
+        }
+    }
+
+    @Override
+    public List<UserOrder> findWhereStatusIs(String status) {
+        try (Session session = FactoryProvider.getSessionFactory().openSession()) {
+            Query<UserOrder> query = session.createQuery(
+                    "SELECT uo FROM UserOrder uo WHERE uo.status = :status ORDER BY uo.orderDate DESC", UserOrder.class
+            );
+            query.setParameter("status", status);
+            return query.list();
+        }
+    }
+
+    @Override
+    public List<UserOrder> findByMonthsAgo(int monthsAgo) {
+        try (Session session = FactoryProvider.getSessionFactory().openSession()) {
+            LocalDate monthsAgoDate = LocalDate.now().minusMonths(monthsAgo);
+            Query<UserOrder> query = session.createQuery(
+                    "SELECT uo FROM UserOrder uo WHERE uo.orderDate >= :monthsAgoDate ORDER BY uo.orderDate DESC", UserOrder.class
+            );
+            query.setParameter("monthsAgoDate", monthsAgoDate.atStartOfDay());
+            return query.list();
+        }
+    }
+
+    @Override
     public void delete(UserOrder userOrder) {
         try (Session session = FactoryProvider.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
@@ -60,7 +95,6 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public Map.Entry<List<UserOrder>, Long> filteredOrders(Long userId, String searchQuery, String status, Long monthsAgo, int pageNumber, int pageSize) {
         try (Session session = FactoryProvider.getSessionFactory().openSession()) {
-            // Base query with JOIN on order items and product details
             StringBuilder hql = new StringBuilder("FROM UserOrder uo JOIN uo.orderItems oi JOIN oi.product p WHERE uo.user.id = :userId");
 
             if (searchQuery != null && !searchQuery.isEmpty()) {
@@ -155,15 +189,6 @@ public class OrderRepositoryImpl implements OrderRepository {
         }
     }
 
-
-    @Override
-    public int getTotalOrdersByUserId(Long userId) {
-        try (Session session = FactoryProvider.getSessionFactory().openSession()) {
-            Query<Long> query = session.createQuery("SELECT COUNT(u) FROM UserOrder u WHERE u.user.id = :userId", Long.class);
-            query.setParameter("userId", userId);
-            return query.uniqueResult().intValue();
-        }
-    }
 
     @Override
     public boolean existsByUserIdAndProductId(long userId, long productId) {
